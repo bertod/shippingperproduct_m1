@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <modules>
+        <Magenz_Shippingperproduct>
+            <module>1.0.0</module>
+        </Magenz_Shippingperproduct>
+    </modules>
+    <global>
+        <models>
+            <magenz_shippingperproduct>
+                <class>Magenz_Shippingperproduct_Model</class>
+            </magenz_shippingperproduct>
+        </models>
+    </global>
+    <!-- Default configuration -->
+    <default>
+        <carriers>
+            <magenz_shippingperproduct>
+                <active>0</active>
+                <model>magenz_shippingperproduct/Carrier</model>
+                <title>Magenz Shipping Per Product</title>
+                <sort_order>10</sort_order>
+                <sallowspecific>0</sallowspecific>
+            </magenz_shippingperproduct>
+        </carriers>
+    </default>
+</config>

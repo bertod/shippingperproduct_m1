@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <sections>
+        <carriers translate="label" module="shipping">
+            <groups>
+                <magenz_shippingperproduct translate="label">
+                    <label>Magenz Shipping Per Product Carrier</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>2</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <!--
+                            The following fields are available
+                            to modify in the admin panel.
+                            The values are saved in the
+                            database.
+
+                            This shipping carrier abstract checks
+                            this value to determine whether
+                            the carrier should be shown.
+                        -->
+                        <active translate="label">
+                            <label>Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </active>
+                        <!--
+                            This value can be used to specify a
+                            custom title for our method.
+                        -->
+                        <title translate="label">
+                            <label>Title</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </title>
+                        <!--
+                            This value can be used to specify a
+                            custom name for our method.
+                        -->
+                        <name translate="label">
+                            <label>Method Name</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </name>
+
+                        <hr1 translate="label tooltip">
+                            <label><![CDATA[<hr /><strong>Calcolus Settings</strong><hr />]]></label>
+                            <tooltip></tooltip>
+                            <frontend_type>label</frontend_type>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <depends><abilita_api>1</abilita_api></depends>
+                        </hr1>
+                        <baseprice translate="label">
+                            <label>Base Price</label>
+                            <comment>set a base price for all products</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </baseprice>
+                        <shippingpricesource translate="label">
+                            <label>Shipping Price Source</label>
+                            <comment>enable this for increment the shipping price</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>magenz_shippingperproduct/system_config_pricesource</source_model>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </shippingpricesource>
+
+                        <shippingfixprice translate="label">
+                            <label>Fix Shipping Price</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>6</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends><shippingpricesource>fix</shippingpricesource></depends>
+                        </shippingfixprice>
+
+                        <shippingcustomattribute translate="label">
+                            <label>Increment Shipping Price</label>
+                            <comment>enable this for increment the shipping price</comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>magenz_shippingperproduct/system_config_magentoattributes</source_model>
+                            <sort_order>7</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends><shippingpricesource>customattribute</shippingpricesource></depends>
+                        </shippingcustomattribute>
+
+                        <itempriceincrement translate="label">
+                            <label>Increment Item Price</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>magenz_shippingperproduct/system_config_incrementprice</source_model>
+                            <sort_order>8</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends><shippingpricesource>itempricebased</shippingpricesource></depends>
+                        </itempriceincrement>
+                        <percentagepriceincrement translate="label">
+                            <label>Percentage of item price to add</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <itempriceincrement>percentage</itempriceincrement>
+                                <shippingpricesource>itempricebased</shippingpricesource>
+                            </depends>
+                        </percentagepriceincrement>
+                        <mathpriceincrement translate="label">
+                            <label>Insert mathematical expression to compute shipping price</label>
+                            <comment><![CDATA[<strong style='color:red'>NOT YET DEVELOPED</strong>]]></comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>11</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <itempriceincrement>math</itempriceincrement>
+                                <shippingpricesource>itempricebased</shippingpricesource>
+                            </depends>
+                        </mathpriceincrement>
+
+                        <hr2 translate="label tooltip">
+                            <label><![CDATA[<hr /><strong>Other Settings</strong><hr />]]></label>
+                            <tooltip></tooltip>
+                            <frontend_type>label</frontend_type>
+                            <sort_order>12</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <depends><abilita_api>1</abilita_api></depends>
+                        </hr2>
+
+
+                        <sallowspecific translate="label">
+                            <label>Ship to Applicable Countries</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>90</sort_order>
+                            <frontend_class>shipping-applicable-country</frontend_class>
+                            <source_model>adminhtml/system_config_source_shipping_allspecificcountries</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </sallowspecific>
+                        <!--
+                            If 'specific countries' is chosen
+                            in the previous option, then this field
+                            allows the administrator to specify
+                            which specific countries this carrier
+                            should be available for.
+                        -->
+                        <specificcountry translate="label">
+                            <label>Ship to Specific Countries</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <sort_order>91</sort_order>
+                            <source_model>adminhtml/system_config_source_country</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                        </specificcountry>
+                        <!--
+                            The sort order is used in Magento
+                            to determine what order the carrier
+                            will appear in relative to the
+                            other carriers available.
+                        -->
+                        <sort_order translate="label">
+                            <label>Sort Order</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>100</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </sort_order>
+                        <!--
+                            This value is used to specify whether
+                            the carrier is available only for
+                            specific countries or all countries
+                            available in the current Magento
+                            installation.
+                        -->
+
+                    </fields>
+                </magenz_shippingperproduct>
+            </groups>
+        </carriers>
+    </sections>
+</config>
