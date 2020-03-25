@@ -63,6 +63,20 @@
                             <show_in_default>1</show_in_default>
                             <depends><abilita_api>1</abilita_api></depends>
                         </hr1>
+                        <computeqty translate="label">
+                            <label>Compute Shipping per qty</label>
+                            <comment>
+                                set yes if you want to apply shipping price for each product qty sold.
+                                e.g.: 2 qty of Prod1 have been bought, so total shipping price is equal to
+                                shipping price x sold qty
+                            </comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </computeqty>
                         <baseprice translate="label">
                             <label>Base Price</label>
                             <comment>set a base price for all products</comment>
@@ -94,8 +108,8 @@
                         </shippingfixprice>
 
                         <shippingcustomattribute translate="label">
-                            <label>Increment Shipping Price</label>
-                            <comment>enable this for increment the shipping price</comment>
+                            <label>Magento product attribute</label>
+                            <comment>Select the product attribute containing the shipping price</comment>
                             <frontend_type>select</frontend_type>
                             <source_model>magenz_shippingperproduct/system_config_magentoattributes</source_model>
                             <sort_order>7</sort_order>
@@ -127,11 +141,28 @@
                                 <shippingpricesource>itempricebased</shippingpricesource>
                             </depends>
                         </percentagepriceincrement>
+                        <includetaxes translate="label">
+                            <label>Percentage on price included taxes</label>
+                            <comment>
+                                set yes if you want to apply calculate shipping price on the price
+                                with taxes included. You usually use it when your prices in the catalog already include taxes
+                            </comment>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>11</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <depends>
+                                <itempriceincrement>percentage</itempriceincrement>
+                                <shippingpricesource>itempricebased</shippingpricesource>
+                            </depends>
+                        </includetaxes>
                         <mathpriceincrement translate="label">
                             <label>Insert mathematical expression to compute shipping price</label>
                             <comment><![CDATA[<strong style='color:red'>NOT YET DEVELOPED</strong>]]></comment>
                             <frontend_type>text</frontend_type>
-                            <sort_order>11</sort_order>
+                            <sort_order>12</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
@@ -145,7 +176,7 @@
                             <label><![CDATA[<hr /><strong>Other Settings</strong><hr />]]></label>
                             <tooltip></tooltip>
                             <frontend_type>label</frontend_type>
-                            <sort_order>12</sort_order>
+                            <sort_order>13</sort_order>
                             <show_in_default>1</show_in_default>
                             <depends><abilita_api>1</abilita_api></depends>
                         </hr2>

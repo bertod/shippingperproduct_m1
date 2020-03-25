@@ -12,7 +12,7 @@ class Magenz_Shippingperproduct_Model_Carrier extends Mage_Shipping_Model_Carrie
             return false;
         }
 
-        Mage::log("SONO ATTIVATA! ",null,"magenz.log");
+        //Mage::log("SONO ATTIVATA! ",null,"magenz.log");
 
         //$handling = Mage::getStoreConfig('carriers/'.$this->_code.'/handling');
         $result = Mage::getModel('shipping/rate_result');
@@ -29,15 +29,20 @@ class Magenz_Shippingperproduct_Model_Carrier extends Mage_Shipping_Model_Carrie
             switch ($this->getConfigData('shippingpricesource')){
                 case "customattribute":
                     $items = $request->getAllItems();
-                    # $price += $this->getCustomAttributePrice($items);
+                    $price += $this->getCustomAttributePrice($items);
                     break;
                 case "fix":
                     $shipprice = $this->getConfigData('shippingfixprice');
-                    if(!empty($shipprice))
+                    if(!empty($shipprice)){
+                        if($this->getConfigData('computeqty'))
+                            $shipprice *= $request->getPackageQty();
+                    }
                         $price += floatval($shipprice);
                     break;
                 case "itempricebased":
-                    $price += $this->getItemBasedPrice($order_total);
+                    #$price += $this->getTotalBasedPrice($order_total);
+                    $items = $request->getAllItems();
+                    $price += $this->getItemBasedPrice($items);
                     break;
             }
 
@@ -61,12 +66,92 @@ class Magenz_Shippingperproduct_Model_Carrier extends Mage_Shipping_Model_Carrie
         return array('magenz_shippingperproduct'=>$this->getConfigData('name'));
     }
 
-    public function getItemBasedPrice($order_total){
+    protected function getCustomAttributePrice($items){
+        $price = 0;
+        if ($items) {
+            foreach ($items as $item) {
+                if ($item->getProduct()->isVirtual() || $item->getParentItem()) {
+                    continue;
+                }
+
+                if ($item->getHasChildren() && $item->isShipSeparately()) {
+                    foreach ($item->getChildren() as $child) {
+                        if (!$child->getProduct()->isVirtual()) {
+                            $product_id = $child->getProductId();
+                            $productObj = Mage::getModel('catalog/product')->load($product_id);
+                            $ship_price = $productObj->getData($this->getConfigData('shippingcustomattribute')); //our shipping attribute code
+                            if($this->getConfigData('computeqty'))
+                                $ship_price *= $item->getQty();
+                            $price += (float)$ship_price;
+                        }
+                    }
+                } else {
+                    $product_id = $item->getProductId();
+                    $productObj = Mage::getModel('catalog/product')->load($product_id);
+                    $ship_price = $productObj->getData($this->getConfigData('shippingcustomattribute')); //our shipping attribute code
+                    if($this->getConfigData('computeqty'))
+                        $ship_price *= $item->getQty();
+                    $price += (float)$ship_price;
+
+
+                }
+            }
+        }
+        return $price;
+    }
+    protected function getTotalBasedPrice($order_total){
         $increment_type = $this->getConfigData('itempriceincrement');
         $price_to_add = 0;
         switch ($increment_type){
             case "percentage":
                 $price_to_add = floatval($this->getConfigData('percentagepriceincrement'))*$order_total/100;
+                break;
+            case "none":
+            case "math":
+                break;
+
+        }
+        return $price_to_add;
+    }
+    protected function getItemBasedPrice($items){
+        $increment_type = $this->getConfigData('itempriceincrement');
+        $price_to_add = 0;
+        switch ($increment_type){
+            case "percentage":
+                if ($items) {
+                    foreach ($items as $item) {
+                        if ($item->getProduct()->isVirtual() || $item->getParentItem()) {
+                            continue;
+                        }
+
+                        if ($item->getHasChildren() && $item->isShipSeparately()) {
+                            foreach ($item->getChildren() as $child) {
+                                if (!$child->getProduct()->isVirtual()) {
+                                    //$price_p = $child->getPrice();
+                                    if($this->getConfigData('includetaxes'))
+                                        $price_p = $child->getPriceInclTax();
+                                    else
+                                        $price_p = $child->getPrice();
+                                    if($this->getConfigData('computeqty'))
+                                        $price_p *= $child->getQty();
+                                    $price_to_add += floatval($this->getConfigData('percentagepriceincrement'))*$price_p/100;
+
+                                }
+                            }
+                        } else {
+                            if($this->getConfigData('includetaxes'))
+                                $price_p = $item->getPriceInclTax();
+                            else
+                                $price_p = $item->getPrice();
+
+                            if($this->getConfigData('computeqty'))
+                                $price_p *= $item->getQty();
+                            //$price_p = $item->getPrice()*$item->getQty();
+                            $price_to_add += floatval($this->getConfigData('percentagepriceincrement'))*$price_p/100;
+                        }
+                    }
+                }
+
                 break;
             case "none":
             case "math":
