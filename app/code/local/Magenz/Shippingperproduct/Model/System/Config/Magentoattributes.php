@@ -11,7 +11,7 @@ class Magenz_Shippingperproduct_Model_System_Config_Magentoattributes
 
         foreach ($attributes as $attribute){
             if (!empty($attribute->getFrontendLabel()))
-                $result[] = array('value' =>  $attribute->getFrontendLabel(), 'label' =>  $attribute->getFrontendLabel());
+                $result[] = array('value' =>  $attribute['attribute_code'], 'label' =>  $attribute->getFrontendLabel());
         }
 
         return $result;
